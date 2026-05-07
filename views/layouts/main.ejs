@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %> | Job Portal</title>
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="/styles/style.css" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💼</text></svg>" />
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <%- include('../partials/navbar') %>
+
+  <!-- ===== LAST VISIT BANNER ===== -->
+  <% if (lastVisit) { %>
+    <div class="last-visit-banner">
+      🕐 Your last visit was on: <strong><%= lastVisit %></strong>
+    </div>
+  <% } %>
+
+  <!-- ===== FLASH MESSAGES ===== -->
+  <%- include('../partials/messages') %>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <main>
+    <%- body %>
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <%- include('../partials/footer') %>
+
+  <!-- ===== GLOBAL JAVASCRIPT ===== -->
+  <script>
+    // Auto-dismiss flash messages after 5 seconds
+    setTimeout(() => {
+      document.querySelectorAll('.flash').forEach(el => {
+        el.style.transition = 'opacity 0.5s';
+        el.style.opacity = '0';
+        setTimeout(() => el.remove(), 500);
+      });
+    }, 5000);
+
+    // Flash close button
+    document.querySelectorAll('.flash-close').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const flash = btn.closest('.flash');
+        flash.style.opacity = '0';
+        setTimeout(() => flash.remove(), 300);
+      });
+    });
+
+    // Hamburger menu toggle
+    const hamburger = document.querySelector('.hamburger');
+    const navLinks = document.querySelector('.nav-links');
+    if (hamburger) {
+      hamburger.addEventListener('click', () => {
+        navLinks.classList.toggle('open');
+      });
+    }
+
+    // Confirmation modal
+    function openConfirmModal(action, message) {
+      const modal = document.getElementById('confirmModal');
+      const msgEl = document.getElementById('confirmMessage');
+      const formEl = document.getElementById('confirmForm');
+      if (modal && msgEl && formEl) {
+        msgEl.textContent = message || 'Are you sure?';
+        formEl.action = action;
+        modal.classList.add('active');
+      }
+    }
+
+    function closeConfirmModal() {
+      const modal = document.getElementById('confirmModal');
+      if (modal) modal.classList.remove('active');
+    }
+  </script>
+
+  <!-- ===== CONFIRMATION MODAL (reusable) ===== -->
+  <div class="modal-overlay" id="confirmModal">
+    <div class="modal-box">
+      <div class="modal-icon">⚠️</div>
+      <h3>Confirm Action</h3>
+      <p id="confirmMessage">Are you sure you want to do this?</p>
+      <div class="modal-actions">
+        <button class="btn btn-outline btn-sm" onclick="closeConfirmModal()">Cancel</button>
+        <form id="confirmForm" method="GET">
+          <button type="submit" class="btn btn-danger btn-sm">Yes, Proceed</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

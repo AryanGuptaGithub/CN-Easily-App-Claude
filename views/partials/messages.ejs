@@ -1,0 +1,29 @@
+<!-- ============================================================
+  partials/messages.ejs
+  Displays flash success and error messages
+  Messages are set in session and cleared after display
+  ============================================================ -->
+
+<% if (successMsg || errorMsg) { %>
+  <div class="flash-container">
+    <div class="container">
+
+      <% if (successMsg) { %>
+        <div class="flash flash-success">
+          <span>✅</span>
+          <span><%= successMsg %></span>
+          <button class="flash-close" aria-label="Close">✕</button>
+        </div>
+      <% } %>
+
+      <% if (errorMsg) { %>
+        <div class="flash flash-error">
+          <span>❌</span>
+          <span><%= errorMsg %></span>
+          <button class="flash-close" aria-label="Close">✕</button>
+        </div>
+      <% } %>
+
+    </div>
+  </div>
+<% } %>

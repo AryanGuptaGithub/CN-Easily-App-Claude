@@ -1,0 +1,113 @@
+<%- include('../layouts/main', { body: `
+
+<div class="page-header">
+  <div class="container">
+    <div>
+      <h1>📋 My Posted Jobs</h1>
+      <p>Manage all the job listings you have created</p>
+    </div>
+    <a href="/jobs/new" class="btn btn-primary">+ Post New Job</a>
+  </div>
+</div>
+
+<div class="page-section" style="padding-top: 32px;">
+  <div class="container">
+
+    <!-- Dashboard Summary Banner -->
+    <div class="dashboard-banner" style="margin-bottom: 32px;">
+      <h2>Welcome, <%= currentUser.name %>! 👋</h2>
+      <p>Here's an overview of your job listings and applications</p>
+      <div class="dashboard-stats">
+        <div class="dash-stat">
+          <div class="n"><%= jobs.length %></div>
+          <div class="l">Total Jobs</div>
+        </div>
+        <div class="dash-stat">
+          <div class="n"><%= jobs.reduce((sum, j) => sum + j.applicants.length, 0) %></div>
+          <div class="l">Total Applicants</div>
+        </div>
+        <div class="dash-stat">
+          <div class="n"><%= jobs.filter(j => new Date(j.applyby) >= new Date()).length %></div>
+          <div class="l">Active Listings</div>
+        </div>
+      </div>
+    </div>
+
+    <% if (jobs.length > 0) { %>
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+        <% jobs.forEach(job => { %>
+          <div style="
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            transition: box-shadow 0.2s;
+          " onmouseover="this.style.boxShadow='var(--shadow-md)'" onmouseout="this.style.boxShadow='none'">
+
+            <div style="flex: 1; min-width: 200px;">
+              <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+                <a href="/jobs/<%= job.id %>" style="font-size: 18px; font-weight: 700; color: var(--primary);">
+                  <%= job.jobdesignation %>
+                </a>
+                <% if (new Date(job.applyby) >= new Date()) { %>
+                  <span class="badge badge-success">Active</span>
+                <% } else { %>
+                  <span class="badge badge-warning">Expired</span>
+                <% } %>
+              </div>
+              <p style="color: var(--gray-500); font-size: 14px;">
+                🏢 <%= job.companyname %> &bull;
+                📍 <%= job.joblocation %> &bull;
+                📅 Apply by: <%= new Date(job.applyby).toLocaleDateString('en-IN') %>
+              </p>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
+              <!-- Applicant count badge -->
+              <a href="/jobs/<%= job.id %>/applicants" style="
+                text-decoration: none;
+                background: var(--primary-light);
+                color: var(--primary);
+                padding: 8px 16px;
+                border-radius: 8px;
+                font-weight: 700;
+                font-size: 14px;
+                text-align: center;
+              ">
+                👥 <%= job.applicants.length %> Applicant(s)
+              </a>
+
+              <!-- Action buttons -->
+              <div style="display: flex; gap: 8px;">
+                <a href="/jobs/<%= job.id %>" class="btn btn-outline btn-sm">👁️ View</a>
+                <a href="/jobs/<%= job.id %>/update" class="btn btn-outline btn-sm">✏️ Edit</a>
+                <a href="#" class="btn btn-danger btn-sm"
+                   onclick="openConfirmModal('/jobs/<%= job.id %>/delete', 'Delete the job \\'<%= job.jobdesignation %>\\' permanently?')">
+                  🗑️ Delete
+                </a>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+
+    <% } else { %>
+      <div class="empty-state">
+        <div class="icon">📝</div>
+        <h3>No jobs posted yet</h3>
+        <p>Start by posting your first job listing to attract talented candidates.</p>
+        <a href="/jobs/new" class="btn btn-primary btn-lg" style="margin-top: 24px;">
+          + Post Your First Job
+        </a>
+      </div>
+    <% } %>
+
+  </div>
+</div>
+
+` }) %>

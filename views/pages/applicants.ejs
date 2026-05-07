@@ -1,0 +1,96 @@
+<%- include('../layouts/main', { body: `
+
+<div class="page-header">
+  <div class="container">
+    <div>
+      <h1>👥 Applicants</h1>
+      <p>
+        <%= job.jobdesignation %> at <%= job.companyname %> &bull;
+        <strong><%= totalApplicants %></strong> total applicant(s)
+      </p>
+    </div>
+    <a href="/jobs/<%= job.id %>" class="btn btn-outline">← Back to Job</a>
+  </div>
+</div>
+
+<div class="page-section" style="padding-top: 32px;">
+  <div class="container">
+
+    <% if (applicants.length > 0) { %>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Applicant</th>
+              <th>Contact</th>
+              <th>Applied On</th>
+              <th>Resume</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% applicants.forEach((applicant, index) => { %>
+              <tr>
+                <td style="color: var(--gray-400); font-weight: 600;">
+                  <%= ((currentPage - 1) * 10) + index + 1 %>
+                </td>
+                <td>
+                  <div class="applicant-name"><%= applicant.name %></div>
+                  <div class="applicant-email"><%= applicant.email %></div>
+                </td>
+                <td><%= applicant.contact %></td>
+                <td>
+                  <%= applicant.appliedAt
+                      ? new Date(applicant.appliedAt).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' })
+                      : 'N/A'
+                  %>
+                </td>
+                <td>
+                  <% if (applicant.resumePath) { %>
+                    <a
+                      href="/<%= applicant.resumePath.replace(/\\\\/g, '/') %>"
+                      target="_blank"
+                      class="btn btn-outline btn-sm"
+                    >
+                      📄 View Resume
+                    </a>
+                  <% } else { %>
+                    <span style="color: var(--gray-400); font-size: 13px;">No resume</span>
+                  <% } %>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <% if (totalPages > 1) { %>
+        <div class="pagination">
+          <a href="/jobs/<%= job.id %>/applicants?page=<%= currentPage - 1 %>"
+             class="page-btn <%= currentPage <= 1 ? 'disabled' : '' %>">←</a>
+
+          <% for (let i = 1; i <= totalPages; i++) { %>
+            <a href="/jobs/<%= job.id %>/applicants?page=<%= i %>"
+               class="page-btn <%= i === currentPage ? 'active' : '' %>"><%= i %></a>
+          <% } %>
+
+          <a href="/jobs/<%= job.id %>/applicants?page=<%= currentPage + 1 %>"
+             class="page-btn <%= currentPage >= totalPages ? 'disabled' : '' %>">→</a>
+        </div>
+      <% } %>
+
+    <% } else { %>
+      <div class="empty-state">
+        <div class="icon">📭</div>
+        <h3>No applicants yet</h3>
+        <p>No one has applied to this job yet. Share the listing to attract candidates.</p>
+        <a href="/jobs/<%= job.id %>" class="btn btn-primary" style="margin-top: 20px">Back to Job</a>
+      </div>
+    <% } %>
+
+  </div>
+</div>
+
+` }) %>

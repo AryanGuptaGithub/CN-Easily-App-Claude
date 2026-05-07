@@ -1,0 +1,140 @@
+<%- include('../layouts/main', { body: `
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="container">
+    <div>
+      <h1>🔍 Browse Jobs</h1>
+      <p>${totalJobs} job(s) found ${search ? 'for "' + search + '"' : ''}</p>
+    </div>
+    <% if (currentUser) { %>
+      <a href="/jobs/new" class="btn btn-primary">+ Post a Job</a>
+    <% } %>
+  </div>
+</div>
+
+<div class="page-section" style="padding-top: 32px;">
+  <div class="container">
+
+    <!-- SEARCH & FILTER BAR -->
+    <div class="filter-bar">
+      <form class="filter-form" method="GET" action="/jobs">
+        <div class="filter-group" style="flex: 2;">
+          <label>Search</label>
+          <input
+            type="text"
+            name="search"
+            class="form-control"
+            placeholder="Job title, company, skills..."
+            value="${search}"
+          />
+        </div>
+
+        <div class="filter-group">
+          <label>Category</label>
+          <select name="category" class="form-control">
+            <option value="all" ${category === 'all' ? 'selected' : ''}>All Categories</option>
+            <% JOB_CATEGORIES.forEach(cat => { %>
+              <option value="<%= cat %>" ${category === cat ? 'selected' : ''}><%= cat %></option>
+            <% }) %>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Location</label>
+          <input
+            type="text"
+            name="location"
+            class="form-control"
+            placeholder="City or state..."
+            value="${location}"
+          />
+        </div>
+
+        <div style="display: flex; gap: 8px; align-items: flex-end; flex-shrink: 0;">
+          <button type="submit" class="btn btn-primary">Search</button>
+          <a href="/jobs" class="btn btn-outline">Clear</a>
+        </div>
+      </form>
+    </div>
+
+    <!-- JOB LISTINGS -->
+    <% if (jobs.length > 0) { %>
+      <div class="jobs-grid">
+        <% jobs.forEach(job => { %>
+          <div class="job-card">
+            <div class="job-card-header">
+              <div>
+                <div class="job-company">🏢 <%= job.companyname %></div>
+                <a href="/jobs/<%= job.id %>" class="job-title"><%= job.jobdesignation %></a>
+              </div>
+              <span class="job-category"><%= job.jobcategory %></span>
+            </div>
+
+            <div class="job-meta">
+              <span>📍 <%= job.joblocation %></span>
+              <span>👥 <%= job.numberofopenings %> opening(s)</span>
+              <span>📅 Apply by: <%= new Date(job.applyby).toLocaleDateString('en-IN') %></span>
+              <span>📬 <%= job.applicants.length %> applicant(s)</span>
+            </div>
+
+            <div class="job-skills">
+              <% job.skillsrequired.slice(0, 4).forEach(skill => { %>
+                <span class="skill-tag"><%= skill %></span>
+              <% }) %>
+              <% if (job.skillsrequired.length > 4) { %>
+                <span class="skill-tag">+<%= job.skillsrequired.length - 4 %> more</span>
+              <% } %>
+            </div>
+
+            <div class="job-card-footer">
+              <span class="job-salary">💰 <%= job.salary %></span>
+              <a href="/jobs/<%= job.id %>" class="btn btn-primary btn-sm">View Details →</a>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+
+      <!-- PAGINATION -->
+      <% if (totalPages > 1) { %>
+        <div class="pagination">
+          <!-- Previous Button -->
+          <a
+            href="/jobs?search=${search}&category=${category}&location=${location}&page=${currentPage - 1}"
+            class="page-btn ${currentPage <= 1 ? 'disabled' : ''}"
+          >←</a>
+
+          <!-- Page Numbers -->
+          <% for (let i = 1; i <= totalPages; i++) { %>
+            <a
+              href="/jobs?search=${search}&category=${category}&location=${location}&page=<%= i %>"
+              class="page-btn <%= i === currentPage ? 'active' : '' %>"
+            ><%= i %></a>
+          <% } %>
+
+          <!-- Next Button -->
+          <a
+            href="/jobs?search=${search}&category=${category}&location=${location}&page=${currentPage + 1}"
+            class="page-btn ${currentPage >= totalPages ? 'disabled' : ''}"
+          >→</a>
+        </div>
+
+        <p style="text-align: center; color: var(--gray-400); font-size: 14px;">
+          Page ${currentPage} of ${totalPages} — ${totalJobs} total jobs
+        </p>
+      <% } %>
+
+    <% } else { %>
+      <!-- EMPTY STATE -->
+      <div class="empty-state">
+        <div class="icon">🔍</div>
+        <h3>No jobs found</h3>
+        <p>Try adjusting your search filters or browse all jobs.</p>
+        <a href="/jobs" class="btn btn-primary" style="margin-top: 20px">Clear Filters</a>
+      </div>
+    <% } %>
+
+  </div>
+</div>
+
+` }) %>

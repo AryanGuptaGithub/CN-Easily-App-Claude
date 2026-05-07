@@ -1,0 +1,15 @@
+<%- include('../layouts/main', { body: `
+
+<div class="page-404">
+  <div>
+    <div class="big-number">404</div>
+    <h2>Page Not Found</h2>
+    <p><%= typeof message !== 'undefined' ? message : "Oops! The page you're looking for doesn't exist or has been moved." %></p>
+    <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+      <a href="/" class="btn btn-primary btn-lg">🏠 Go Home</a>
+      <a href="/jobs" class="btn btn-outline btn-lg">Browse Jobs</a>
+    </div>
+  </div>
+</div>
+
+` }) %>

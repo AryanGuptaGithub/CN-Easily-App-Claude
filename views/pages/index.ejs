@@ -1,0 +1,154 @@
+<%- include('../layouts/main', { body: `
+
+<!-- ===== HERO SECTION ===== -->
+<section class="hero">
+  <div class="hero-content">
+    <h1>Find Your <span>Dream Job</span><br>Start Your Journey</h1>
+    <p>Browse thousands of job listings from top companies. Your next career move is just a click away.</p>
+
+    <!-- Hero Search -->
+    <div class="hero-search">
+      <input type="text" id="heroSearch" placeholder="Job title, skills, or company..." />
+      <button class="btn btn-primary" onclick="window.location='/jobs?search='+document.getElementById('heroSearch').value">
+        Find Jobs
+      </button>
+    </div>
+
+    <!-- CTA Buttons -->
+    <div class="hero-cta">
+      <a href="/jobs" class="btn btn-white btn-lg">Browse All Jobs</a>
+      <a href="/register" class="btn btn-outline-white btn-lg">Post a Job</a>
+    </div>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar">
+      <div class="stat-item">
+        <div class="number">${stats.totalJobs}+</div>
+        <div class="label">Active Jobs</div>
+      </div>
+      <div class="stat-item">
+        <div class="number">${stats.totalCompanies}+</div>
+        <div class="label">Companies</div>
+      </div>
+      <div class="stat-item">
+        <div class="number">${stats.totalCategories}+</div>
+        <div class="label">Categories</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FEATURED JOBS ===== -->
+<section class="page-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>✨ Featured Job Openings</h2>
+      <p>Handpicked opportunities from top companies hiring right now</p>
+    </div>
+
+    <% if (featuredJobs.length > 0) { %>
+      <div class="jobs-grid">
+        <% featuredJobs.forEach(job => { %>
+          <div class="job-card">
+            <div class="job-card-header">
+              <div>
+                <div class="job-company">🏢 <%= job.companyname %></div>
+                <a href="/jobs/<%= job.id %>" class="job-title"><%= job.jobdesignation %></a>
+              </div>
+              <span class="job-category"><%= job.jobcategory %></span>
+            </div>
+
+            <div class="job-meta">
+              <span>📍 <%= job.joblocation %></span>
+              <span>👥 <%= job.numberofopenings %> opening(s)</span>
+              <span>📅 Apply by: <%= new Date(job.applyby).toLocaleDateString('en-IN') %></span>
+            </div>
+
+            <div class="job-skills">
+              <% job.skillsrequired.slice(0, 3).forEach(skill => { %>
+                <span class="skill-tag"><%= skill %></span>
+              <% }) %>
+              <% if (job.skillsrequired.length > 3) { %>
+                <span class="skill-tag">+<%= job.skillsrequired.length - 3 %> more</span>
+              <% } %>
+            </div>
+
+            <div class="job-card-footer">
+              <span class="job-salary">💰 <%= job.salary %></span>
+              <a href="/jobs/<%= job.id %>" class="btn btn-primary btn-sm">View Details →</a>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+
+      <div style="text-align: center; margin-top: 40px;">
+        <a href="/jobs" class="btn btn-outline btn-lg">View All Jobs →</a>
+      </div>
+
+    <% } else { %>
+      <div class="empty-state">
+        <div class="icon">📭</div>
+        <h3>No jobs posted yet</h3>
+        <p>Be the first to post a job opening!</p>
+        <a href="/register" class="btn btn-primary" style="margin-top: 20px">Post a Job</a>
+      </div>
+    <% } %>
+  </div>
+</section>
+
+<!-- ===== CATEGORIES SECTION ===== -->
+<section class="page-section" style="background: white; padding: 60px 0;">
+  <div class="container">
+    <div class="section-header">
+      <h2>🗂️ Browse by Category</h2>
+      <p>Explore jobs in your field of interest</p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px;">
+      <% const catIcons = { Technology: '💻', Design: '🎨', Marketing: '📣', Finance: '💰', Sales: '🤝', 'Human Resources': '👥', Operations: '⚙️', 'Customer Support': '🎧', Legal: '⚖️', Other: '📋' }; %>
+      <% categories.forEach(cat => { %>
+        <a href="/jobs?category=<%= cat %>" style="
+          display: flex; flex-direction: column; align-items: center; gap: 8px;
+          background: var(--gray-50); border: 1px solid var(--gray-200);
+          border-radius: 12px; padding: 20px 12px; text-align: center;
+          transition: all 0.2s; color: var(--gray-700); font-weight: 600; font-size: 14px;
+          text-decoration: none;
+        " onmouseover="this.style.background='var(--primary-light)'; this.style.borderColor='var(--primary)'; this.style.color='var(--primary)'"
+           onmouseout="this.style.background='var(--gray-50)'; this.style.borderColor='var(--gray-200)'; this.style.color='var(--gray-700)'">
+          <span style="font-size: 28px;"><%= catIcons[cat] || '📋' %></span>
+          <%= cat %>
+        </a>
+      <% }) %>
+    </div>
+  </div>
+</section>
+
+<!-- ===== HOW IT WORKS ===== -->
+<section class="page-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>🚀 How It Works</h2>
+      <p>Get started in 3 simple steps</p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 32px; text-align: center;">
+      <div style="padding: 32px; background: white; border-radius: 16px; border: 1px solid var(--gray-200);">
+        <div style="font-size: 48px; margin-bottom: 16px;">🔍</div>
+        <h3 style="font-size: 18px; margin-bottom: 8px;">1. Browse Jobs</h3>
+        <p style="color: var(--gray-500); font-size: 15px;">Search and filter through hundreds of job listings by title, category, or location.</p>
+      </div>
+      <div style="padding: 32px; background: white; border-radius: 16px; border: 1px solid var(--gray-200);">
+        <div style="font-size: 48px; margin-bottom: 16px;">📄</div>
+        <h3 style="font-size: 18px; margin-bottom: 8px;">2. Apply Easily</h3>
+        <p style="color: var(--gray-500); font-size: 15px;">Submit your application with your resume in seconds. No account needed.</p>
+      </div>
+      <div style="padding: 32px; background: white; border-radius: 16px; border: 1px solid var(--gray-200);">
+        <div style="font-size: 48px; margin-bottom: 16px;">🎉</div>
+        <h3 style="font-size: 18px; margin-bottom: 8px;">3. Get Hired</h3>
+        <p style="color: var(--gray-500); font-size: 15px;">Receive a confirmation email and wait for the recruiter to reach out.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+` }) %>

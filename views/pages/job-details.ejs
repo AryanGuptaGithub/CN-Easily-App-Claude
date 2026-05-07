@@ -1,0 +1,116 @@
+<%- include('../layouts/main', { body: `
+
+<div class="page-section" style="padding-top: 32px;">
+  <div class="container-md">
+
+    <!-- Breadcrumb -->
+    <p style="color: var(--gray-400); font-size: 14px; margin-bottom: 20px;">
+      <a href="/">Home</a> &rsaquo; <a href="/jobs">Jobs</a> &rsaquo; <%= job.jobdesignation %>
+    </p>
+
+    <div class="job-detail-card">
+
+      <!-- HEADER -->
+      <div class="job-detail-header">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px;">
+          <div>
+            <div style="font-size: 13px; opacity: 0.75; margin-bottom: 8px;">
+              Posted by <%= job.recruiterName %> · <%= new Date(job.jobposted).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' }) %>
+            </div>
+            <h1 class="job-detail-title"><%= job.jobdesignation %></h1>
+            <p class="job-detail-company">🏢 <%= job.companyname %></p>
+          </div>
+          <span class="badge" style="background: rgba(255,255,255,0.2); color: white; font-size: 14px; padding: 6px 16px;">
+            <%= job.jobcategory %>
+          </span>
+        </div>
+
+        <div class="job-detail-meta">
+          <span class="meta-chip">📍 <%= job.joblocation %></span>
+          <span class="meta-chip">💰 <%= job.salary %></span>
+          <span class="meta-chip">👥 <%= job.numberofopenings %> Opening(s)</span>
+          <span class="meta-chip">📅 Apply by: <%= new Date(job.applyby).toLocaleDateString('en-IN') %></span>
+          <span class="meta-chip">📬 <%= job.applicants.length %> Applicant(s)</span>
+        </div>
+      </div>
+
+      <!-- BODY -->
+      <div class="job-detail-body">
+
+        <!-- Description -->
+        <div class="job-description" style="margin-bottom: 32px;">
+          <h3>📋 Job Description</h3>
+          <p><%= job.jobdescription || 'No description provided.' %></p>
+        </div>
+
+        <!-- Skills Required -->
+        <div class="skills-section" style="margin-bottom: 32px;">
+          <h3>🛠️ Skills Required</h3>
+          <div class="job-skills" style="margin-top: 12px;">
+            <% job.skillsrequired.forEach(skill => { %>
+              <span class="skill-tag" style="font-size: 14px; padding: 5px 14px;"><%= skill %></span>
+            <% }) %>
+          </div>
+        </div>
+
+        <!-- Job Info Grid -->
+        <div class="info-grid">
+          <div class="info-item">
+            <label>📂 Category</label>
+            <p><%= job.jobcategory %></p>
+          </div>
+          <div class="info-item">
+            <label>📍 Location</label>
+            <p><%= job.joblocation %></p>
+          </div>
+          <div class="info-item">
+            <label>💰 Salary (Annual)</label>
+            <p><%= job.salary %></p>
+          </div>
+          <div class="info-item">
+            <label>👥 Openings</label>
+            <p><%= job.numberofopenings %></p>
+          </div>
+          <div class="info-item">
+            <label>📅 Apply Before</label>
+            <p><%= new Date(job.applyby).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' }) %></p>
+          </div>
+          <div class="info-item">
+            <label>🏢 Company</label>
+            <p><%= job.companyname %></p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ACTION BUTTONS -->
+      <div class="job-actions">
+
+        <!-- Apply button — everyone can see -->
+        <a href="/jobs/<%= job.id %>/apply" class="btn btn-primary btn-lg">
+          📩 Apply Now
+        </a>
+
+        <a href="/jobs" class="btn btn-outline">← Back to Jobs</a>
+
+        <!-- Recruiter actions — only shown to the job's creator -->
+        <% if (currentUser && currentUser.id === job.recruiterId) { %>
+          <a href="/jobs/<%= job.id %>/update" class="btn btn-outline" style="margin-left: auto;">✏️ Edit Job</a>
+
+          <a href="#" class="btn btn-danger"
+             onclick="openConfirmModal('/jobs/<%= job.id %>/delete', 'Delete \\'<%= job.jobdesignation %>\\' permanently? All applicant data will be lost.')">
+            🗑️ Delete
+          </a>
+
+          <a href="/jobs/<%= job.id %>/applicants" class="btn btn-success">
+            👥 View Applicants (<%= job.applicants.length %>)
+          </a>
+        <% } %>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+` }) %>

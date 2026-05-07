@@ -1,0 +1,130 @@
+<%- include('../layouts/main', { body: `
+
+<div class="page-header">
+  <div class="container">
+    <div>
+      <h1>✏️ Edit Job</h1>
+      <p>Update the details for "<%= job.jobdesignation %>"</p>
+    </div>
+    <a href="/jobs/<%= job.id %>" class="btn btn-outline">← Back to Job</a>
+  </div>
+</div>
+
+<div class="page-section" style="padding-top: 32px;">
+  <div class="container-md">
+    <div class="form-card">
+
+      <!-- Validation Errors -->
+      <% if (errors && errors.length > 0) { %>
+        <ul class="errors-list">
+          <% errors.forEach(err => { %><li><%= err %></li><% }) %>
+        </ul>
+      <% } %>
+
+      <form action="/jobs/<%= job.id %>/update" method="POST" novalidate>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="jobdesignation">Job Title <span class="required">*</span></label>
+            <input
+              type="text" id="jobdesignation" name="jobdesignation"
+              class="form-control"
+              value="<%= formData.jobdesignation || '' %>"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="jobcategory">Category <span class="required">*</span></label>
+            <select id="jobcategory" name="jobcategory" class="form-control" required>
+              <% categories.forEach(cat => { %>
+                <option value="<%= cat %>" <%= formData.jobcategory === cat ? 'selected' : '' %>><%= cat %></option>
+              <% }) %>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="companyname">Company Name <span class="required">*</span></label>
+            <input
+              type="text" id="companyname" name="companyname"
+              class="form-control"
+              value="<%= formData.companyname || '' %>"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="joblocation">Location <span class="required">*</span></label>
+            <input
+              type="text" id="joblocation" name="joblocation"
+              class="form-control"
+              value="<%= formData.joblocation || '' %>"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="salary">Salary Range <span class="required">*</span></label>
+            <input
+              type="text" id="salary" name="salary"
+              class="form-control"
+              value="<%= formData.salary || '' %>"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="numberofopenings">Openings <span class="required">*</span></label>
+            <input
+              type="number" id="numberofopenings" name="numberofopenings"
+              class="form-control"
+              min="1"
+              value="<%= formData.numberofopenings || 1 %>"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="applyby">Application Deadline <span class="required">*</span></label>
+          <input
+            type="date" id="applyby" name="applyby"
+            class="form-control"
+            value="<%= formData.applyby ? formData.applyby.split('T')[0] : '' %>"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="skillsrequired">Skills Required <span class="required">*</span></label>
+          <input
+            type="text" id="skillsrequired" name="skillsrequired"
+            class="form-control"
+            placeholder="Comma-separated skills"
+            value="<%= Array.isArray(formData.skillsrequired) ? formData.skillsrequired.join(', ') : (formData.skillsrequired || '') %>"
+            required
+          />
+          <p class="form-hint">Separate with commas</p>
+        </div>
+
+        <div class="form-group">
+          <label for="jobdescription">Job Description</label>
+          <textarea
+            id="jobdescription" name="jobdescription"
+            class="form-control"
+            rows="5"
+          ><%= formData.jobdescription || '' %></textarea>
+        </div>
+
+        <div style="display: flex; gap: 12px; margin-top: 8px;">
+          <button type="submit" class="btn btn-primary btn-lg">💾 Save Changes</button>
+          <a href="/jobs/<%= job.id %>" class="btn btn-outline btn-lg">Cancel</a>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+
+` }) %>

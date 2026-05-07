@@ -1,0 +1,111 @@
+<%- include('../layouts/main', { body: `
+
+<div class="page-section" style="padding-top: 32px; background: linear-gradient(135deg, #f0f4ff, #f5f0ff); min-height: calc(100vh - 64px);">
+  <div class="container-sm">
+
+    <!-- Job Summary Card -->
+    <div style="background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border-radius: 16px; padding: 24px; margin-bottom: 24px;">
+      <p style="opacity: 0.8; font-size: 13px; margin-bottom: 4px;">You are applying for</p>
+      <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 4px;"><%= job.jobdesignation %></h2>
+      <p style="opacity: 0.9;">🏢 <%= job.companyname %> &bull; 📍 <%= job.joblocation %></p>
+    </div>
+
+    <!-- Application Form -->
+    <div class="form-card">
+      <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 8px; color: var(--gray-900);">📄 Your Application</h2>
+      <p style="color: var(--gray-500); margin-bottom: 24px;">Fill in your details and upload your resume to apply.</p>
+
+      <!-- Validation Errors -->
+      <% if (errors && errors.length > 0) { %>
+        <ul class="errors-list">
+          <% errors.forEach(err => { %><li><%= err %></li><% }) %>
+        </ul>
+      <% } %>
+
+      <form action="/apply/<%= job.id %>" method="POST" enctype="multipart/form-data" novalidate>
+
+        <!-- Full Name -->
+        <div class="form-group">
+          <label for="name">Full Name <span class="required">*</span></label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            class="form-control ${errors && errors.length > 0 && !formData.name ? 'is-invalid' : ''}"
+            placeholder="Your full name"
+            value="<%= formData.name || '' %>"
+            required
+          />
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label for="email">Email Address <span class="required">*</span></label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            class="form-control"
+            placeholder="your.email@example.com"
+            value="<%= formData.email || '' %>"
+            required
+          />
+          <p class="form-hint">Confirmation email will be sent to this address.</p>
+        </div>
+
+        <!-- Contact -->
+        <div class="form-group">
+          <label for="contact">Phone Number <span class="required">*</span></label>
+          <input
+            type="tel"
+            id="contact"
+            name="contact"
+            class="form-control"
+            placeholder="+91 98765 43210"
+            value="<%= formData.contact || '' %>"
+            required
+          />
+        </div>
+
+        <!-- Resume Upload -->
+        <div class="form-group">
+          <label>Resume (PDF) <span class="required">*</span></label>
+          <div class="file-upload-wrapper" id="dropzone">
+            <input type="file" name="resume" accept=".pdf" id="resumeInput" required />
+            <div class="file-upload-icon">📎</div>
+            <p class="file-upload-text">
+              <strong>Click to upload</strong> or drag and drop<br>
+              PDF only · Max 5MB
+            </p>
+            <p id="fileName" style="margin-top: 8px; font-size: 13px; color: var(--primary);"></p>
+          </div>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; justify-content: center; margin-top: 8px;">
+          🚀 Submit Application
+        </button>
+
+      </form>
+
+      <div class="form-divider" style="margin-top: 24px;">or</div>
+      <p style="text-align: center; font-size: 14px; color: var(--gray-500);">
+        <a href="/jobs/<%= job.id %>">← Back to Job Details</a>
+      </p>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  // Show selected filename
+  document.getElementById('resumeInput').addEventListener('change', function() {
+    const fileName = this.files[0]?.name;
+    const display = document.getElementById('fileName');
+    if (fileName) {
+      display.textContent = '✅ Selected: ' + fileName;
+    }
+  });
+</script>
+
+` }) %>

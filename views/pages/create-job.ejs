@@ -1,0 +1,169 @@
+<%- include('../layouts/main', { body: `
+
+<div class="page-header">
+  <div class="container">
+    <div>
+      <h1>📝 Post a New Job</h1>
+      <p>Fill in the details to attract the right candidates</p>
+    </div>
+    <a href="/my-jobs" class="btn btn-outline">← My Jobs</a>
+  </div>
+</div>
+
+<div class="page-section" style="padding-top: 32px;">
+  <div class="container-md">
+    <div class="form-card">
+
+      <!-- Validation Errors -->
+      <% if (errors && errors.length > 0) { %>
+        <ul class="errors-list">
+          <% errors.forEach(err => { %><li><%= err %></li><% }) %>
+        </ul>
+      <% } %>
+
+      <form action="/jobs" method="POST" novalidate>
+
+        <div class="form-row">
+          <!-- Job Designation -->
+          <div class="form-group">
+            <label for="jobdesignation">Job Title / Designation <span class="required">*</span></label>
+            <input
+              type="text"
+              id="jobdesignation"
+              name="jobdesignation"
+              class="form-control"
+              placeholder="e.g. Senior Frontend Developer"
+              value="<%= formData.jobdesignation || '' %>"
+              required
+            />
+          </div>
+
+          <!-- Category -->
+          <div class="form-group">
+            <label for="jobcategory">Job Category <span class="required">*</span></label>
+            <select id="jobcategory" name="jobcategory" class="form-control" required>
+              <option value="">-- Select Category --</option>
+              <% categories.forEach(cat => { %>
+                <option value="<%= cat %>" <%= formData.jobcategory === cat ? 'selected' : '' %>><%= cat %></option>
+              <% }) %>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <!-- Company Name -->
+          <div class="form-group">
+            <label for="companyname">Company Name <span class="required">*</span></label>
+            <input
+              type="text"
+              id="companyname"
+              name="companyname"
+              class="form-control"
+              placeholder="e.g. TechCorp India Pvt Ltd"
+              value="<%= formData.companyname || '' %>"
+              required
+            />
+          </div>
+
+          <!-- Location -->
+          <div class="form-group">
+            <label for="joblocation">Job Location <span class="required">*</span></label>
+            <input
+              type="text"
+              id="joblocation"
+              name="joblocation"
+              class="form-control"
+              placeholder="e.g. Bangalore, Karnataka"
+              value="<%= formData.joblocation || '' %>"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <!-- Salary -->
+          <div class="form-group">
+            <label for="salary">Salary Range (Annual) <span class="required">*</span></label>
+            <input
+              type="text"
+              id="salary"
+              name="salary"
+              class="form-control"
+              placeholder="e.g. 8,00,000 - 12,00,000"
+              value="<%= formData.salary || '' %>"
+              required
+            />
+            <p class="form-hint">Format: min - max (in INR)</p>
+          </div>
+
+          <!-- Number of Openings -->
+          <div class="form-group">
+            <label for="numberofopenings">Number of Openings <span class="required">*</span></label>
+            <input
+              type="number"
+              id="numberofopenings"
+              name="numberofopenings"
+              class="form-control"
+              placeholder="e.g. 3"
+              min="1"
+              max="100"
+              value="<%= formData.numberofopenings || 1 %>"
+              required
+            />
+          </div>
+        </div>
+
+        <!-- Apply By Date -->
+        <div class="form-group">
+          <label for="applyby">Application Deadline <span class="required">*</span></label>
+          <input
+            type="date"
+            id="applyby"
+            name="applyby"
+            class="form-control"
+            value="<%= formData.applyby || '' %>"
+            min="<%= new Date().toISOString().split('T')[0] %>"
+            required
+          />
+        </div>
+
+        <!-- Skills Required -->
+        <div class="form-group">
+          <label for="skillsrequired">Skills Required <span class="required">*</span></label>
+          <input
+            type="text"
+            id="skillsrequired"
+            name="skillsrequired"
+            class="form-control"
+            placeholder="e.g. React, Node.js, MongoDB, REST APIs"
+            value="<%= formData.skillsrequired || '' %>"
+            required
+          />
+          <p class="form-hint">Separate skills with commas</p>
+        </div>
+
+        <!-- Job Description -->
+        <div class="form-group">
+          <label for="jobdescription">Job Description</label>
+          <textarea
+            id="jobdescription"
+            name="jobdescription"
+            class="form-control"
+            placeholder="Describe the role, responsibilities, and what you're looking for in a candidate..."
+            rows="5"
+          ><%= formData.jobdescription || '' %></textarea>
+        </div>
+
+        <div style="display: flex; gap: 12px; margin-top: 8px;">
+          <button type="submit" class="btn btn-primary btn-lg">
+            🚀 Post Job
+          </button>
+          <a href="/jobs" class="btn btn-outline btn-lg">Cancel</a>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+
+` }) %>
