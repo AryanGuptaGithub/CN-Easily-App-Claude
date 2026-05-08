@@ -1,31 +1,20 @@
-// ============================================================
-// config/mailer.js
-// Nodemailer configuration for sending confirmation emails
-// Uses Ethereal Mail (fake SMTP) for development/college use
-// No real Gmail account needed!
-// ============================================================
 
 import nodemailer from 'nodemailer';
 
-// ============================================================
-// createTransporter()
-// Creates an Ethereal test account automatically
-// In production, replace with Gmail or real SMTP credentials
-// ============================================================
+
 let transporter = null;
 
 const getTransporter = async () => {
-  if (transporter) return transporter; // Reuse existing transporter
+  if (transporter) return transporter; 
 
   try {
-    // Ethereal generates a fake email account for testing
-    // Every email sent will appear in the Ethereal inbox at https://ethereal.email
+
     const testAccount = await nodemailer.createTestAccount();
 
     transporter = nodemailer.createTransport({
       host: 'smtp.ethereal.email',
       port: 587,
-      secure: false, // false = use STARTTLS
+      secure: false,
       auth: {
         user: testAccount.user,
         pass: testAccount.pass
@@ -44,11 +33,7 @@ const getTransporter = async () => {
   }
 };
 
-// ============================================================
-// sendApplicationConfirmation(options)
-// Sends a confirmation email to the job applicant
-// Called from job.controller.js after successful application
-// ============================================================
+
 const sendApplicationConfirmation = async ({ to, applicantName, jobTitle, companyName }) => {
   const transport = await getTransporter();
 
@@ -56,7 +41,7 @@ const sendApplicationConfirmation = async ({ to, applicantName, jobTitle, compan
     throw new Error('Email transporter not available');
   }
 
-  // --- Build the email HTML body ---
+
   const htmlContent = `
     <!DOCTYPE html>
     <html>
@@ -109,7 +94,7 @@ const sendApplicationConfirmation = async ({ to, applicantName, jobTitle, compan
     </html>
   `;
 
-  // --- Send the email ---
+
   const info = await transport.sendMail({
     from: '"Job Portal" <noreply@jobportal.com>',
     to: to,
@@ -118,7 +103,7 @@ const sendApplicationConfirmation = async ({ to, applicantName, jobTitle, compan
     text: `Dear ${applicantName}, Your application for ${jobTitle} at ${companyName} has been received. Good luck!`
   });
 
-  // Log the Ethereal preview URL (where you can see the "sent" email)
+
   console.log(`📧 Email sent: ${nodemailer.getTestMessageUrl(info)}`);
 
   return info;

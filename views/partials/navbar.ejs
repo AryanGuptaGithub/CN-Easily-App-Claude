@@ -1,18 +1,13 @@
-<!-- ============================================================
-  partials/navbar.ejs
-  Responsive navigation bar
-  Changes based on whether user is logged in (currentUser)
-  ============================================================ -->
+
 
 <nav class="navbar">
   <div class="nav-container">
 
-    <!-- Brand / Logo -->
     <a href="/" class="nav-brand">
       💼 Job<span>Portal</span>
     </a>
 
-    <!-- Search Bar (Desktop) -->
+
     <div class="nav-search">
       <form action="/jobs" method="GET">
         <input
@@ -25,13 +20,13 @@
       </form>
     </div>
 
-    <!-- Navigation Links -->
+
     <div class="nav-links">
       <a href="/">Home</a>
       <a href="/jobs">Browse Jobs</a>
 
       <% if (currentUser) { %>
-        <!-- Logged in: show recruiter options -->
+   
         <a href="/jobs/new" class="btn-nav-primary btn">+ Post Job</a>
         <a href="/my-jobs">My Jobs</a>
 
@@ -42,13 +37,13 @@
         </form>
 
       <% } else { %>
-        <!-- Not logged in: show login/register -->
+    
         <a href="/login" class="btn-nav-outline btn">Login</a>
         <a href="/register" class="btn-nav-primary btn">Register</a>
       <% } %>
     </div>
 
-    <!-- Hamburger (Mobile) -->
+
     <button class="hamburger" aria-label="Toggle menu">
       <span></span>
       <span></span>

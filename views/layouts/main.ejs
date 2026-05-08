@@ -5,38 +5,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title><%= title %> | Job Portal</title>
 
-  <!-- Main Stylesheet -->
+
   <link rel="stylesheet" href="/styles/style.css" />
 
-  <!-- Favicon -->
+
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💼</text></svg>" />
 </head>
 <body>
 
-  <!-- ===== NAVBAR ===== -->
+  
   <%- include('../partials/navbar') %>
 
-  <!-- ===== LAST VISIT BANNER ===== -->
+
   <% if (lastVisit) { %>
     <div class="last-visit-banner">
       🕐 Your last visit was on: <strong><%= lastVisit %></strong>
     </div>
   <% } %>
 
-  <!-- ===== FLASH MESSAGES ===== -->
+
   <%- include('../partials/messages') %>
 
-  <!-- ===== MAIN CONTENT ===== -->
+  
   <main>
     <%- body %>
   </main>
 
-  <!-- ===== FOOTER ===== -->
+
   <%- include('../partials/footer') %>
 
-  <!-- ===== GLOBAL JAVASCRIPT ===== -->
+
   <script>
-    // Auto-dismiss flash messages after 5 seconds
+   
     setTimeout(() => {
       document.querySelectorAll('.flash').forEach(el => {
         el.style.transition = 'opacity 0.5s';
@@ -45,7 +45,7 @@
       });
     }, 5000);
 
-    // Flash close button
+    
     document.querySelectorAll('.flash-close').forEach(btn => {
       btn.addEventListener('click', () => {
         const flash = btn.closest('.flash');
@@ -54,7 +54,7 @@
       });
     });
 
-    // Hamburger menu toggle
+    
     const hamburger = document.querySelector('.hamburger');
     const navLinks = document.querySelector('.nav-links');
     if (hamburger) {
@@ -63,7 +63,7 @@
       });
     }
 
-    // Confirmation modal
+    
     function openConfirmModal(action, message) {
       const modal = document.getElementById('confirmModal');
       const msgEl = document.getElementById('confirmMessage');
@@ -81,7 +81,7 @@
     }
   </script>
 
-  <!-- ===== CONFIRMATION MODAL (reusable) ===== -->
+
   <div class="modal-overlay" id="confirmModal">
     <div class="modal-box">
       <div class="modal-icon">⚠️</div>

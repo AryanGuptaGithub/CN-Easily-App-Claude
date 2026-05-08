@@ -1,8 +1,4 @@
-// ============================================================
-// routes/user.routes.js
-// Defines all authentication-related URL routes
-// Routes only define: METHOD + PATH + which controller to call
-// ============================================================
+
 
 import { Router } from 'express';
 import {
@@ -15,14 +11,7 @@ import {
 
 const router = Router();
 
-// ============================================================
-// AUTH ROUTES
-// GET  /register → Show registration form
-// POST /register → Process registration
-// GET  /login    → Show login form
-// POST /login    → Process login
-// POST /logout   → Destroy session
-// ============================================================
+
 
 router.get('/register', showRegisterPage);
 router.post('/register', registerRecruiter);

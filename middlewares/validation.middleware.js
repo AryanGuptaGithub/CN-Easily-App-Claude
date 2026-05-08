@@ -1,49 +1,27 @@
-// ============================================================
-// middlewares/validation.middleware.js
-// Centralized validation helpers used across the application
-// These are reusable functions — not Express middleware per se,
-// but helper utilities that controllers can call
-// ============================================================
 
-// ============================================================
-// validateEmail(email)
-// Returns true if the email looks valid
-// ============================================================
 const validateEmail = (email) => {
   const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return re.test(String(email).toLowerCase());
 };
 
-// ============================================================
-// validateRequired(value)
-// Returns true if the value is not empty
-// ============================================================
+
 const validateRequired = (value) => {
   return value !== undefined && value !== null && String(value).trim() !== '';
 };
 
-// ============================================================
-// validateMinLength(value, min)
-// Returns true if value length is >= min
-// ============================================================
+
 const validateMinLength = (value, min) => {
   return validateRequired(value) && String(value).trim().length >= min;
 };
 
-// ============================================================
-// validateFutureDate(dateStr)
-// Returns true if the date is in the future
-// ============================================================
+
 const validateFutureDate = (dateStr) => {
   const date = new Date(dateStr);
   return !isNaN(date) && date > new Date();
 };
 
-// ============================================================
-// validateRegisterForm(body)
-// Validates recruiter registration form
-// Returns array of error messages (empty if all valid)
-// ============================================================
+
+
 const validateRegisterForm = (body) => {
   const { name, email, password, confirmPassword } = body;
   const errors = [];
@@ -63,10 +41,7 @@ const validateRegisterForm = (body) => {
   return errors;
 };
 
-// ============================================================
-// validateLoginForm(body)
-// Validates login form
-// ============================================================
+
 const validateLoginForm = (body) => {
   const { email, password } = body;
   const errors = [];
@@ -77,10 +52,7 @@ const validateLoginForm = (body) => {
   return errors;
 };
 
-// ============================================================
-// validateJobForm(body)
-// Validates job creation/update form
-// ============================================================
+
 const validateJobForm = (body) => {
   const { jobcategory, jobdesignation, joblocation, companyname,
           salary, applyby, skillsrequired, numberofopenings } = body;
@@ -99,10 +71,8 @@ const validateJobForm = (body) => {
   return errors;
 };
 
-// ============================================================
-// validateApplicantForm(body, file)
-// Validates job application form
-// ============================================================
+
+
 const validateApplicantForm = (body, file) => {
   const { name, email, contact } = body;
   const errors = [];

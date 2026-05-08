@@ -1,7 +1,3 @@
-// ============================================================
-// controllers/job.controller.js
-// Handles all job-related logic: CRUD operations + applications
-// ============================================================
 
 import {
   getAllJobs,
@@ -22,17 +18,14 @@ const JOB_CATEGORIES = [
   'Human Resources', 'Operations', 'Customer Support', 'Legal', 'Other'
 ];
 
-// ============================================================
-// showLandingPage — GET /
-// Renders the homepage with featured jobs
-// ============================================================
+
 const showLandingPage = (req, res) => {
   const allJobs = getAllJobs();
 
-  // Show only the 3 most recently posted jobs as "featured"
+
   const featuredJobs = allJobs.slice(-3).reverse();
 
-  // Count stats for the landing page
+
   const stats = {
     totalJobs: allJobs.length,
     totalCompanies: [...new Set(allJobs.map(j => j.companyname))].length,
@@ -47,17 +40,14 @@ const showLandingPage = (req, res) => {
   });
 };
 
-// ============================================================
-// showAllJobs — GET /jobs
-// Shows paginated and searchable job listings
-// ============================================================
+
 const showAllJobs = (req, res) => {
   let allJobs = getAllJobs();
 
-  // --- Search & Filter ---
+
   const { search, category, location, page } = req.query;
 
-  // Filter by search term (title, company, designation)
+
   if (search && search.trim() !== '') {
     const term = search.toLowerCase().trim();
     allJobs = allJobs.filter(job =>
@@ -68,14 +58,14 @@ const showAllJobs = (req, res) => {
     );
   }
 
-  // Filter by category
+
   if (category && category !== 'all') {
     allJobs = allJobs.filter(job =>
       job.jobcategory.toLowerCase() === category.toLowerCase()
     );
   }
 
-  // Filter by location
+
   if (location && location.trim() !== '') {
     const loc = location.toLowerCase().trim();
     allJobs = allJobs.filter(job =>
@@ -83,17 +73,17 @@ const showAllJobs = (req, res) => {
     );
   }
 
-  // --- Pagination ---
-  const JOBS_PER_PAGE = 6; // Show 6 jobs per page
+
+  const JOBS_PER_PAGE = 6; 
   const currentPage = parseInt(page) || 1;
   const totalJobs = allJobs.length;
   const totalPages = Math.ceil(totalJobs / JOBS_PER_PAGE);
 
-  // Slice the array for the current page
+
   const startIndex = (currentPage - 1) * JOBS_PER_PAGE;
   const paginatedJobs = allJobs.slice(startIndex, startIndex + JOBS_PER_PAGE);
 
-  // Get unique categories for filter dropdown
+  
   const availableCategories = [...new Set(getAllJobs().map(j => j.jobcategory))];
 
   res.render('pages/jobs', {
@@ -110,10 +100,8 @@ const showAllJobs = (req, res) => {
   });
 };
 
-// ============================================================
-// showJobDetails — GET /jobs/:id
-// Shows full details of a single job
-// ============================================================
+
+
 const showJobDetails = (req, res) => {
   const job = getJobById(req.params.id);
 
@@ -130,10 +118,8 @@ const showJobDetails = (req, res) => {
   });
 };
 
-// ============================================================
-// showCreateJobPage — GET /jobs/new
-// Shows the create job form (recruiters only)
-// ============================================================
+
+
 const showCreateJobPage = (req, res) => {
   res.render('pages/create-job', {
     title: 'Post a New Job',
@@ -143,10 +129,8 @@ const showCreateJobPage = (req, res) => {
   });
 };
 
-// ============================================================
-// createNewJob — POST /jobs
-// Processes the create job form
-// ============================================================
+
+
 const createNewJob = (req, res) => {
   const { jobcategory, jobdesignation, joblocation, companyname,
           salary, applyby, skillsrequired, numberofopenings, jobdescription } = req.body;
@@ -190,10 +174,8 @@ const createNewJob = (req, res) => {
   res.redirect(`/jobs/${newJob.id}`);
 };
 
-// ============================================================
-// showUpdateJobPage — GET /jobs/:id/update
-// Shows edit form pre-filled with job data
-// ============================================================
+
+
 const showUpdateJobPage = (req, res) => {
   const job = getJobById(req.params.id);
 
@@ -212,14 +194,12 @@ const showUpdateJobPage = (req, res) => {
     job,
     categories: JOB_CATEGORIES,
     errors: [],
-    formData: job // Pre-fill the form with existing data
+    formData: job 
   });
 };
 
-// ============================================================
-// updateExistingJob — POST /jobs/:id/update
-// Processes the update job form
-// ============================================================
+
+
 const updateExistingJob = (req, res) => {
   const job = getJobById(req.params.id);
 
@@ -236,7 +216,7 @@ const updateExistingJob = (req, res) => {
   const errors = [];
   const formData = req.body;
 
-  // --- Same validation as create ---
+
   if (!formData.jobcategory) errors.push('Job category is required');
   if (!formData.jobdesignation || formData.jobdesignation.trim().length < 3) errors.push('Job title must be at least 3 characters');
   if (!formData.joblocation || formData.joblocation.trim() === '') errors.push('Job location is required');
@@ -267,10 +247,7 @@ const updateExistingJob = (req, res) => {
   res.redirect(`/jobs/${req.params.id}`);
 };
 
-// ============================================================
-// deleteExistingJob — GET /jobs/:id/delete
-// Deletes a job (only owner can do this)
-// ============================================================
+
 const deleteExistingJob = (req, res) => {
   const job = getJobById(req.params.id);
 
@@ -296,10 +273,7 @@ const deleteExistingJob = (req, res) => {
   res.redirect('/jobs');
 };
 
-// ============================================================
-// showApplyPage — GET /jobs/:id/apply
-// Shows the job application form
-// ============================================================
+
 const showApplyPage = (req, res) => {
   const job = getJobById(req.params.id);
 
@@ -318,10 +292,7 @@ const showApplyPage = (req, res) => {
   });
 };
 
-// ============================================================
-// submitApplication — POST /apply/:id
-// Processes the job application with resume upload
-// ============================================================
+
 const submitApplication = async (req, res) => {
   const job = getJobById(req.params.id);
 
@@ -354,7 +325,7 @@ const submitApplication = async (req, res) => {
     });
   }
 
-  // --- Add applicant to model ---
+
   const result = addApplicant(req.params.id, {
     name,
     email,
@@ -367,7 +338,7 @@ const submitApplication = async (req, res) => {
     return res.redirect(`/jobs/${req.params.id}/apply`);
   }
 
-  // --- Send confirmation email (non-blocking) ---
+
   try {
     await sendApplicationConfirmation({
       to: email,
@@ -376,7 +347,7 @@ const submitApplication = async (req, res) => {
       companyName: job.companyname
     });
   } catch (emailError) {
-    // Email failure should NOT block the application
+
     console.error('Email sending failed:', emailError.message);
   }
 
@@ -384,10 +355,6 @@ const submitApplication = async (req, res) => {
   res.redirect(`/jobs/${req.params.id}`);
 };
 
-// ============================================================
-// showApplicants — GET /jobs/:id/applicants
-// Shows all applicants for a job (only the job owner can see)
-// ============================================================
 const showApplicants = (req, res) => {
   const job = getJobById(req.params.id);
 
@@ -395,13 +362,13 @@ const showApplicants = (req, res) => {
     return res.status(404).render('pages/404', { title: 'Job Not Found' });
   }
 
-  // Authorization: only owner can view applicants
+
   if (job.recruiterId !== req.session.recruiter.id) {
     req.session.errorMsg = 'You are not authorized to view applicants for this job.';
     return res.redirect(`/jobs/${job.id}`);
   }
 
-  // Pagination for applicants
+
   const APPLICANTS_PER_PAGE = 10;
   const currentPage = parseInt(req.query.page) || 1;
   const allApplicants = job.applicants;
@@ -420,10 +387,8 @@ const showApplicants = (req, res) => {
   });
 };
 
-// ============================================================
-// showMyJobs — GET /my-jobs
-// Shows all jobs posted by the logged-in recruiter
-// ============================================================
+
+
 const showMyJobs = (req, res) => {
   const myJobs = getJobsByRecruiter(req.session.recruiter.id);
 

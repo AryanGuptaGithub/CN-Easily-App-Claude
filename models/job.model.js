@@ -1,14 +1,4 @@
-// ============================================================
-// models/job.model.js
-// Handles all job and applicant data using in-memory arrays
-// This is the core data layer of the Job Portal
-// ============================================================
 
-// ============================================================
-// IN-MEMORY DATA STORE
-// Pre-seeded with sample jobs so the app looks populated
-// when you first run it — great for demos and presentations
-// ============================================================
 let jobs = [
   {
     id: 'job_seed_1',
@@ -92,39 +82,24 @@ let jobs = [
   }
 ];
 
-// ============================================================
-// getAllJobs()
-// Returns the full list of all jobs
-// ============================================================
+
 const getAllJobs = () => {
   return jobs;
 };
 
-// ============================================================
-// getJobById(id)
-// Finds and returns a single job by its ID
-// Returns undefined if not found
-// ============================================================
+
 const getJobById = (id) => {
   return jobs.find(job => job.id === id);
 };
 
-// ============================================================
-// getJobsByRecruiter(recruiterId)
-// Returns all jobs posted by a specific recruiter
-// Used in the recruiter dashboard
-// ============================================================
+
 const getJobsByRecruiter = (recruiterId) => {
   return jobs.filter(job => job.recruiterId === recruiterId);
 };
 
-// ============================================================
-// createJob(jobData, recruiterId, recruiterName)
-// Creates a new job and adds it to the array
-// Returns the newly created job
-// ============================================================
+
 const createJob = (jobData, recruiterId, recruiterName) => {
-  // Convert skillsrequired from comma-separated string to array
+
   let skills = jobData.skillsrequired;
   if (typeof skills === 'string') {
     skills = skills.split(',').map(s => s.trim()).filter(s => s.length > 0);
@@ -151,12 +126,7 @@ const createJob = (jobData, recruiterId, recruiterName) => {
   return newJob;
 };
 
-// ============================================================
-// updateJob(id, updatedData, recruiterId)
-// Finds the job and updates its fields
-// Only the job owner can update
-// Returns updated job or null if not found/unauthorized
-// ============================================================
+
 const updateJob = (id, updatedData, recruiterId) => {
   const jobIndex = jobs.findIndex(job => job.id === id);
 
@@ -189,12 +159,7 @@ const updateJob = (id, updatedData, recruiterId) => {
   return jobs[jobIndex];
 };
 
-// ============================================================
-// deleteJob(id, recruiterId)
-// Removes a job from the array
-// Only the owner can delete
-// Returns true if deleted, false if unauthorized, null if not found
-// ============================================================
+
 const deleteJob = (id, recruiterId) => {
   const jobIndex = jobs.findIndex(job => job.id === id);
 
@@ -205,11 +170,7 @@ const deleteJob = (id, recruiterId) => {
   return true;
 };
 
-// ============================================================
-// addApplicant(jobId, applicantData)
-// Adds an applicant to a specific job's applicants array
-// Returns the updated job or null if not found
-// ============================================================
+
 const addApplicant = (jobId, applicantData) => {
   const job = getJobById(jobId);
   if (!job) return null;
@@ -227,17 +188,14 @@ const addApplicant = (jobId, applicantData) => {
   return { job, applicant: newApplicant };
 };
 
-// ============================================================
-// getApplicantsByJob(jobId)
-// Returns all applicants for a specific job
-// ============================================================
+
 const getApplicantsByJob = (jobId) => {
   const job = getJobById(jobId);
   if (!job) return null;
   return job.applicants;
 };
 
-// Export all model functions
+
 export {
   getAllJobs,
   getJobById,

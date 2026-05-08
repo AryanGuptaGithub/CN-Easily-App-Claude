@@ -1,0 +1,175 @@
+<div class="main-container">
+  <div class="filters">
+    <div class="filter-section">
+      <div class="filter-heading">
+        <span>Job filters</span>
+        <a href="#" class="filter-edit">Clear all</a>
+      </div>
+    </div>
+    
+    <div class="filter-section">
+      <div class="filter-heading">Date posted</div>
+      <div class="filter-option">
+        <input type="radio" id="past24" name="datePosted">
+        <label for="past24">Past 24 hours</label>
+      </div>
+      <div class="filter-option">
+        <input type="radio" id="past3days" name="datePosted">
+        <label for="past3days">Past 3 days</label>
+      </div>
+      <div class="filter-option">
+        <input type="radio" id="pastWeek" name="datePosted" checked>
+        <label for="pastWeek">Past week</label>
+      </div>
+      <div class="filter-option">
+        <input type="radio" id="pastMonth" name="datePosted">
+        <label for="pastMonth">Past month</label>
+      </div>
+    </div>
+    
+    <div class="filter-section">
+      <div class="filter-heading">Experience level</div>
+      <div class="filter-option">
+        <input type="checkbox" id="internship">
+        <label for="internship">Internship</label>
+      </div>
+      <div class="filter-option">
+        <input type="checkbox" id="entry" checked>
+        <label for="entry">Entry level</label>
+      </div>
+      <div class="filter-option">
+        <input type="checkbox" id="associate" checked>
+        <label for="associate">Associate</label>
+      </div>
+      <div class="filter-option">
+        <input type="checkbox" id="mid-senior">
+        <label for="mid-senior">Mid-Senior level</label>
+      </div>
+      <div class="filter-option">
+        <input type="checkbox" id="director">
+        <label for="director">Director</label>
+      </div>
+    </div>
+    
+    <div class="filter-section">
+      <div class="filter-heading">Job type</div>
+      <div class="filter-option">
+        <input type="checkbox" id="fulltime" checked>
+        <label for="fulltime">Full-time</label>
+      </div>
+      <div class="filter-option">
+        <input type="checkbox" id="parttime">
+        <label for="parttime">Part-time</label>
+      </div>
+      <div class="filter-option">
+        <input type="checkbox" id="contract">
+        <label for="contract">Contract</label>
+      </div>
+      <div class="filter-option">
+        <input type="checkbox" id="remote" checked>
+        <label for="remote">Remote</label>
+      </div>
+    </div>
+  </div>
+  
+  <div class="jobs-content">
+    <div class="search-container">
+      <div class="search-input">
+        <i class="bi bi-search"></i>
+        <input type="text" placeholder="Search job titles or keywords">
+      </div>
+      <div class="location-input">
+        <i class="bi bi-geo-alt"></i>
+        <input type="text" placeholder="Location">
+      </div>
+      <button class="search-btn">Search</button>
+    </div>
+    
+    <div class="jobs-section-header">
+      <div class="jobs-found">235 jobs found</div>
+      <div class="sort-options">
+        <span class="sort-by">Sort by:</span>
+        <select class="sort-select">
+          <option>Most relevant</option>
+          <option>Recent</option>
+          <option>Salary (high to low)</option>
+        </select>
+      </div>
+    </div>
+    
+    <div class="job-list">
+      <% if(jobs.length === 0){ %>
+        <h1 class="text-danger text-center">No jobs found</h1>
+      <% } %>
+      
+      <% jobs.forEach(function(job){ %>
+      <div class="job-card">
+        <% if(job.featured){ %>
+          <div class="featured-badge">
+            <i class="bi bi-star-fill"></i> Featured
+          </div>
+        <% } %>
+        <div class="job-logo">
+          <img src="<%= job.logo %>" alt="Google">
+        </div>
+        <div class="job-content">
+          <h3 class="job-title-all"><%= job.job_designation %></h3>
+          <p class="company-name-all"><%= job.company_name %></p>
+          <div class="job-location-all">
+            <i class="bi bi-geo-alt"></i> <%= job.job_location %>
+          </div>
+          <div class="job-details">
+            <div class="job-detail">
+              <i class="fa-solid fa-briefcase"></i> <%= job.experience %>
+            </div>
+            <div class="job-detail salary">
+              <i class="fa-solid fa-wallet"></i> <%= job.salary %>
+            </div>
+            <div class="job-detail">
+              <i class="fa-solid fa-users"></i><%= job.employees %>
+            </div>
+            <span class="easy-apply-badge">Easy Apply</span>
+          </div>
+          <div class="skills">
+            <% job.skills_required.forEach(function(skill){ %>
+              <span class="skill"><%= skill %></span>
+            <% }); %>
+          </div>
+          <div class="job-actions">
+            <div class="job-posted">
+              <%= job.job_posted %> · 127 applicants
+            </div>
+            <div class="action-btns">
+              <button class="save-btn">
+                <i class="bi bi-bookmark"></i> Save
+              </button>
+              <!-- Changed Apply button to redirect using an anchor tag -->
+              <a href="/job/<%= job.id %>" class="apply-btn btn btn-primary">
+                <i class="bi bi-send"></i> View
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <% }); %>
+    </div>
+    
+    <nav aria-label="Page navigation">
+      <ul class="pagination">
+        <li class="page-item">
+          <a class="page-link" href="#" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="page-item">
+          <a class="page-link" href="#" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
